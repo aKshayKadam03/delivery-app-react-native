@@ -3,13 +3,43 @@ import { TouchableOpacity, View , Image } from 'react-native'
 
 import { createBottomTabNavigator , BottomTabBar } from '@react-navigation/bottom-tabs'
 import Svg , {Path} from 'react-native-svg'
-
+import { isIphoneX } from 'react-native-iphone-x-helper';
 import {Home} from '../screens'
 
 import { COLORS , icons } from '../constants/index.js'
  
 
 const Tab = createBottomTabNavigator();
+
+
+const CustomTabBar = (props) => {
+    if (isIphoneX()) {
+        return (
+            <View>
+                <View
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: 30,
+                        backgroundColor: COLORS.white
+                    }}
+                ></View>
+                <BottomTabBar
+                    {...props.props}
+                />
+            </View>
+        )
+    } else {
+        return (
+            <BottomTabBar
+                {...props.props}
+            />
+        )
+    }
+
+}
  
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
 
@@ -102,6 +132,11 @@ const Tabs = () => {
                     backgroundColor : "transparent"
                 }
             }}
+            tabBar={(props) => (
+                <CustomTabBar
+                    props={props}
+                />
+            )}
         >
             {tabsData.map(tab=>(
                 <Tab.Screen
